@@ -78,54 +78,17 @@ for (var i=0;i<characters.length;i++){
 	for (var j=0;j<lines.length;j++){
 		var l = lines[j];
 		var index=l.indexOf(c);
-		if (index>1){
-			var cand = l.substring(index-2,index);
-			if (cand.indexOf(c)===-1){
-				if (mnemonicList.indexOf(cand)===-1){
-					mnemonicList.push( cand );
+		if (index>=0){
+			for (var k=0;k<l.length-1;k++){
+				for (var k2=k+1;k2<l.length;k2++){
+					var cand = l[k]+""+l[k2];	
+					if (cand.indexOf(c)===-1){
+						if (mnemonicList.indexOf(cand)===-1){
+							mnemonicList.push( cand );
+						}
+					}			
 				}
-			}
-		}
-		if (index>=0&&index<l.length-2){
-			var cand = l.substring(index+1,index+3);
-			if (cand.indexOf(c)===-1){
-				if (mnemonicList.indexOf(cand)===-1){
-					mnemonicList.push( cand );
-				}
-			}			
-		}
-		if (index>0&&index<l.length-1){
-			var cand = l[index-1]+l[index+1];
-			if (cand.indexOf(c)===-1){
-				if (mnemonicList.indexOf(cand)===-1){
-					mnemonicList.push( cand );
-				}
-			}			
-		}
-		index=l.lastIndexOf(c);
-		if (index>1){
-			var cand = l.substring(index-2,index);
-			if (cand.indexOf(c)===-1){
-				if (mnemonicList.indexOf(cand)===-1){
-					mnemonicList.push( cand );
-				}
-			}
-		}
-		if (index>=0&&index<l.length-2){
-			var cand = l.substring(index+1,index+3);
-			if (cand.indexOf(c)===-1){
-				if (mnemonicList.indexOf(cand)===-1){
-					mnemonicList.push( cand );
-				}
-			}			
-		}
-		if (index>0&&index<l.length-1){
-			var cand = l[index-1]+l[index+1];
-			if (cand.indexOf(c)===-1){
-				if (mnemonicList.indexOf(cand)===-1){
-					mnemonicList.push( cand );
-				}
-			}			
+			}		
 		}
 	}
 	possibleMnemonics[c]=mnemonicList;

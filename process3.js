@@ -140,44 +140,54 @@ var maxDepth=3;
 var radicalCount=50;
 var radicalsAllocated=0;
 
-//assign things by frequencies;
-for (var i=0;i<sortedchars.length;i++){
-	var c = sortedchars[i];
-	//if it can be explained in terms of previous characters
-	var mnemonicList = possibleMnemonics[c]; 
-	var allocated=false;
+var charsAdded=0;
 
-	for (var j=0;j<mnemonicList.length;j++){
-		var mnemonic = mnemonicList[j];
-		var ma = mnemonic[0];
-		var mb = mnemonic[1];
-		if ( (ma in dictionary) && (mb in dictionary) ){
-			var dd1 = dictionaryDepth[ma];
-			var dd2 = dictionaryDepth[mb];
-			var dd = Math.max(dd1,dd2);
-			if ( (dd+1<maxDepth) ) {
-				var r1 = dictionary[ma];
-				var r2 = dictionary[mb];
-				var compound = `(${r1}, ${r2})`
-				if (!(compound in reverseDictionary )){
-					dictionary[c]=compound
-					reverseDictionary[compound]=c;
-					dictionaryDepth[c]=dd+1;
-					console.log(`${c} = ${dictionary[c]}`)
-					allocated=true;		
+while(charsAdded<sortedchars.length){
+	//assign things by frequencies;
+	for (var i=0;i<sortedchars.length;i++){
+		var c = sortedchars[i];
+		//if it can be explained in terms of previous characters
+		var mnemonicList = possibleMnemonics[c]; 
+		var allocated=false;
+
+		for (var j=0;j<mnemonicList.length;j++){
+			var mnemonic = mnemonicList[j];
+			var ma = mnemonic[0];
+			var mb = mnemonic[1];
+			if ( (ma in dictionary) && (mb in dictionary) ){
+				var dd1 = dictionaryDepth[ma];
+				var dd2 = dictionaryDepth[mb];
+				var dd = Math.max(dd1,dd2);
+				if ( (dd+1<maxDepth) ) {
+					var r1 = dictionary[ma];
+					var r2 = dictionary[mb];
+					var compound = `(${r1}, ${r2})`
+					if (!(compound in reverseDictionary )){
+						dictionary[c]=compound
+						reverseDictionary[compound]=c;
+						dictionaryDepth[c]=dd+1;
+						console.log(`${c} = ${dictionary[c]}`)
+						allocated=true;	
+						charsAdded++;
+						break;		
+					}
 				}
-				break;	
 			}
 		}
 	}
 
-	if (!allocated){
-		dictionary[c]=radicalsAllocated.toString();
-		reverseDictionary[radicalsAllocated.toString()]=c;
-		dictionaryDepth[c]=0;
-		radicalsAllocated++;
+	for (var i=0;i<sortedchars.length;i++){
+		var c=  sortedchars[i]
+		if (! (c in dictionary) ){
+			dictionary[c]=radicalsAllocated.toString();
+			reverseDictionary[radicalsAllocated.toString()]=c;
+			dictionaryDepth[c]=0;
+			radicalsAllocated++;
+			charsAdded++;
+			break;
+		}
 	}
 }
 
-console.log(dictionary)
+console.log(dictionary);
 console.log("radicals allocated  " +radicalsAllocated);
